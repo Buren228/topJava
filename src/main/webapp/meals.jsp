@@ -16,6 +16,7 @@
         }
     </style>
 </head>
+
 <body>
 <section>
     <h3><a href="index.html">Home</a></h3>
@@ -23,6 +24,27 @@
     <h2>Meals</h2>
     <a href="meals?action=create">Add Meal</a>
     <br><br>
+    <h2>${param.action == 'filter' ? 'filter meals' : null}</h2>
+    <jsp:useBean id = "timeUtil" class="ru.javawebinar.topjava.util.DateTimeUtil" scope="request"/>
+    <form method="post" action="filt">
+        <dl>
+            <dt>От даты:</dt>
+            <dd><input type="date" value="${timeUtil.startDate}" name="startDate" required></dd>
+            <dt>До даты:</dt>
+            <dd><input type="date" value="${timeUtil.endDate}" name="endDate" required></dd>
+        </dl>
+        <dl>
+            <dt>От времени:</dt>
+            <dd><input type="time" value="${timeUtil.startTime}" name="startTime" required></dd>
+            <dt>До времени:</dt>
+            <dd><input type="time" value="${timeUtil.endTime}" name="endTime" required></dd>
+        </dl>
+        <dl>
+            <dd>
+                <button type="submit"> Отфильтровать</button>
+            </dd>
+        </dl>
+    </form>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
         <tr>
@@ -33,6 +55,7 @@
             <th></th>
         </tr>
         </thead>
+
         <c:forEach items="${meals}" var="meal">
             <jsp:useBean id="meal" type="ru.javawebinar.topjava.to.MealTo"/>
             <tr class="${meal.excess ? 'excess' : 'normal'}">

@@ -1,8 +1,11 @@
 package ru.javawebinar.topjava.util;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.MealTo;
+import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -50,6 +53,7 @@ public class MealsUtil {
     }
 
     private static MealTo createTo(Meal meal, boolean excess) {
-        return new MealTo(meal.getId(),null, meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
+        Integer mealId=SecurityUtil.authUserId()!=meal.getUserId()?meal.getUserId():SecurityUtil.authUserId();
+        return new MealTo(meal.getId(),meal.getUserId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
     }
 }

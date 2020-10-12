@@ -2,6 +2,11 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.repository.inmemory.InMemoryMealRepository;
@@ -22,20 +27,19 @@ public class MealServlet extends HttpServlet {
 
     private MealRepository repository;
 
-    @Override
+    @Bean
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         repository = new InMemoryMealRepository();
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(@Autowired HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
-        String userId = request.getParameter("userId");
 
         Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
-                Integer.valueOf(userId),
+                Integer.parseInt(request.getParameter("userId")),
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories")));
@@ -46,7 +50,7 @@ public class MealServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(@Autowired HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
         switch (action == null ? "all" : action) {
@@ -63,6 +67,7 @@ public class MealServlet extends HttpServlet {
                         repository.get(getId(request));
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
+                log.info("Create {} ",meal.getUserId());
                 break;
             case "all":
             default:
@@ -74,7 +79,7 @@ public class MealServlet extends HttpServlet {
         }
     }
 
-    private int getId(HttpServletRequest request) {
+    private int getId(@Autowired HttpServletRequest request) {
         String paramId = Objects.requireNonNull(request.getParameter("id"));
         return Integer.parseInt(paramId);
     }
