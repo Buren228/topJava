@@ -11,10 +11,7 @@ import ru.javawebinar.topjava.web.MealServlet;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -22,10 +19,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class InMemoryMealRepository implements MealRepository {
     private final Map<Integer, Meal> repositoryOfMeals = new ConcurrentHashMap<>();
     private final AtomicInteger counterOfMeals = new AtomicInteger(0);
-//    private final Map<Integer, User> repositoryOfUsers = new ConcurrentHashMap<>();
-//    private final AtomicInteger counterOfUsers = new AtomicInteger(0);
-//    public static InMemoryUserRepository userRepository;
-
     {
         MealsUtil.meals.forEach(this::save);
     }
