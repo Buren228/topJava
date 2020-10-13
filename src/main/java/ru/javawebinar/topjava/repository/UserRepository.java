@@ -4,7 +4,6 @@ import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.User;
 
 import java.util.List;
-@Repository
 public interface UserRepository {
     // null if not found, when updated
     User save(User user);
