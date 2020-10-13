@@ -57,11 +57,13 @@ public class InMemoryUserRepository implements UserRepository {
         log.info("getByEmail {}", email);
         List<User> users = new ArrayList<>();
         repository.forEach((id, user) -> users.add(user));
-        for (User user : users) {
-            if (user.getEmail().equals(email)) {
-                return user;
-            }
-        }
-        return null;
+        //        for (User user : users) {
+//            if (user.getEmail().equals(email)) {
+//                return user;
+//            }
+//        }
+        return users.stream()
+                .filter(user -> user.getEmail().equals(email)).
+                        findAny().orElse(null);
     }
 }
