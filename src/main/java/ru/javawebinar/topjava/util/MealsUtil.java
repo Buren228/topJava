@@ -4,7 +4,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
+<<<<<<< HEAD
 import ru.javawebinar.topjava.to.MealTo;
+=======
+import ru.javawebinar.topjava.model.MealTo;
+>>>>>>> f499311... some corrects
 import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDate;
@@ -36,7 +40,11 @@ public class MealsUtil {
     }
 
     public static List<MealTo> getFilteredTos(Collection<Meal> meals, int caloriesPerDay, LocalTime startTime, LocalTime endTime) {
+<<<<<<< HEAD
         return filterByPredicate(meals, caloriesPerDay, meal -> DateTimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime));
+=======
+        return filterByPredicate(meals, caloriesPerDay, meal -> TimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime));
+>>>>>>> f499311... some corrects
     }
 
     public static List<MealTo> filterByPredicate(Collection<Meal> meals, int caloriesPerDay, Predicate<Meal> filter) {
@@ -53,7 +61,11 @@ public class MealsUtil {
     }
 
     private static MealTo createTo(Meal meal, boolean excess) {
+<<<<<<< HEAD
         Integer mealId=SecurityUtil.authUserId()!=meal.getUserId()?meal.getUserId():SecurityUtil.authUserId();
         return new MealTo(meal.getId(),meal.getUserId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
+=======
+        return new MealTo(meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
+>>>>>>> f499311... some corrects
     }
 }
