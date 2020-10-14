@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryUserRepository implements UserRepository {
@@ -49,7 +50,7 @@ public class InMemoryUserRepository implements UserRepository {
         log.info("getAll");
         List<User> users = new ArrayList<>();
         repository.forEach((id, user) -> users.add(user));
-        return users;
+        return users.stream().sorted().collect(Collectors.toList());
     }
 
     @Override

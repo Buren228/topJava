@@ -15,12 +15,13 @@ import java.util.List;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFound;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
+
 @Service
 public class MealService {
 
     private MealRepository repository;
-
-    public MealService(@Qualifier("inMemoryMealRepository") MealRepository repository) {
+    @Autowired
+    public MealService(MealRepository repository) {
         this.repository = repository;
     }
 
