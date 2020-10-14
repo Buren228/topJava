@@ -14,11 +14,13 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryMealRepository implements MealRepository {
     private final Map<Integer, Meal> repositoryOfMeals = new ConcurrentHashMap<>();
     private final AtomicInteger counterOfMeals = new AtomicInteger(0);
+
     {
         MealsUtil.meals.forEach(this::save);
     }
@@ -30,38 +32,23 @@ public class InMemoryMealRepository implements MealRepository {
             repositoryOfMeals.put(meal.getId(), meal);
             return meal;
         }
-        // handle case: update, but not present in storage
-        if(meal.getId().equals(SecurityUtil.authUserId())){
-            return repositoryOfMeals.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
-        }
         return null;
     }
 
     @Override
     public boolean delete(int id) {
-        if(repositoryOfMeals.get(id).getId().equals(SecurityUtil.authUserId()))
-        {
-            return repositoryOfMeals.remove(id) != null;
-        }
-        return false;
+        return repositoryOfMeals.remove(id) != null;
     }
 
     @Override
     public Meal get(int id) {
-
-        if(repositoryOfMeals.get(id).getId().equals(SecurityUtil.authUserId()))
-        {
-            return repositoryOfMeals.get(id);
-        }
-        else return null;
-
+        return repositoryOfMeals.get(id);
     }
 
     @Override
     public Collection<Meal> getAll() {
-        List<Meal> meals=new ArrayList<>();
-        repositoryOfMeals.forEach((id,meal)->meals.add(meal));
-        meals.removeIf(meal -> !meal.getUserId().equals(SecurityUtil.authUserId()));
+        List<Meal> meals = new ArrayList<>();
+        repositoryOfMeals.forEach((id, meal) -> meals.add(meal));
         return meals;
     }
 }
